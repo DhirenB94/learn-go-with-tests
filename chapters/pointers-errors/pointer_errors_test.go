@@ -10,26 +10,23 @@ func TestWallet(t *testing.T) {
 		wallet := pointerserrors.Wallet{}
 
 		wallet.Deposit(pointerserrors.Bitcoin(10))
-
-		got := wallet.Balance()
-		want := pointerserrors.Bitcoin(10)
-
-		if got != want {
-			t.Errorf("got %s but want %s", got, want)
-		}
+		assertBalance(t, wallet, pointerserrors.Bitcoin(10))
 	})
 	t.Run("withdraw", func(t *testing.T) {
 		wallet := pointerserrors.Wallet{}
 
 		wallet.Deposit(pointerserrors.Bitcoin(20))
 		wallet.Withdraw(pointerserrors.Bitcoin(10))
-
-		got := wallet.Balance()
-		want := pointerserrors.Bitcoin(10)
-
-		if got != want {
-			t.Errorf("got %s but want %s", got, want)
-		}
+		assertBalance(t, wallet, pointerserrors.Bitcoin(10))
 	})
 
+}
+
+func assertBalance(t testing.TB, wallet pointerserrors.Wallet, want pointerserrors.Bitcoin) {
+	t.Helper()
+	got := wallet.Balance()
+
+	if got != want {
+		t.Errorf("got %s but want %s", got, want)
+	}
 }
