@@ -8,10 +8,10 @@ import (
 func TestWallet(t *testing.T) {
 	wallet := pointerserrors.Wallet{}
 
-	wallet.Deposit(10)
+	wallet.Deposit(pointerserrors.Bitcoin(10))
 
 	got := wallet.Balance()
-	want := 10
+	want := pointerserrors.Bitcoin(10)
 
 	if got != want {
 		t.Errorf("got %d but want %d", got, want)
