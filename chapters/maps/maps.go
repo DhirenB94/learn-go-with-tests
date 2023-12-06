@@ -52,3 +52,9 @@ func (d Dictionary) Update(word, definition string) error {
 	}
 	return nil
 }
+
+// no need to have error handling for deleting a value that isnt found
+func (d Dictionary) Delete(word string) {
+	//Go has a built in delete func that wors on maps
+	delete(d, word)
+}

@@ -72,34 +72,37 @@ func TestUpdate(t *testing.T) {
 
 	})
 }
+func TestDelete(t *testing.T) {
+	word := "test"
+	definition := "this is just a test"
+	dictionary := maps.Dictionary{word: definition}
+
+	dictionary.Delete(word)
+
+	_, err := dictionary.Search(word)
+	assertError(t, err, maps.ErrWordNotFound)
+}
 
 func assertEqualStrings(t testing.TB, got, want string) {
 	t.Helper()
-
 	if got != want {
 		t.Errorf("got %q, want %q", got, want)
 	}
 }
-
 func assertError(t testing.TB, got, want error) {
 	t.Helper()
-
 	if got != want {
 		t.Errorf("got %q, want %q", got, want)
 	}
 }
-
 func assertNoError(t testing.TB, err error) {
 	t.Helper()
-
 	if err != nil {
 		t.Fatal("got an error but should not have one")
 	}
 }
-
 func assertDefinition(t testing.TB, dictionary maps.Dictionary, word, definition string) {
 	t.Helper()
-
 	got, err := dictionary.Search(word)
 	assertNoError(t, err)
 	assertEqualStrings(t, got, definition)
