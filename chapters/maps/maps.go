@@ -20,11 +20,15 @@ func (d Dictionary) Search(word string) (string, error) {
 
 // Add should not modify existing definitions for a word, it should only add new words
 func (d Dictionary) Add(word, definition string) error {
-	_, ok := d[word]
+	_, err := d.Search(word)
 
-	if !ok {
+	switch err {
+	case ErrWordNotFound:
 		d[word] = definition
-		return nil
+	case nil:
+		return ErrWordExists
+	default:
+		return err
 	}
-	return ErrWordExists
+	return nil
 }
