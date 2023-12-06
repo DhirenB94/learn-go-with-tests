@@ -23,6 +23,18 @@ func TestSearch(t *testing.T) {
 
 }
 
+func TestAdd(t *testing.T) {
+	dictionary := maps.Dictionary{}
+
+	dictionary.Add("test3", "this is just a test")
+	want := "this is just a test"
+
+	got, err := dictionary.Search("test3")
+
+	assertEqualStrings(t, got, want)
+	assertNoError(t, err)
+}
+
 func assertEqualStrings(t testing.TB, got, want string) {
 	t.Helper()
 
