@@ -26,13 +26,11 @@ func TestSearch(t *testing.T) {
 func TestAdd(t *testing.T) {
 	dictionary := maps.Dictionary{}
 
-	dictionary.Add("test3", "this is just a test")
-	want := "this is just a test"
+	word := "test3"
+	definition := "this is just a test"
+	dictionary.Add(word, definition)
 
-	got, err := dictionary.Search("test3")
-
-	assertEqualStrings(t, got, want)
-	assertNoError(t, err)
+	assertDefinition(t, dictionary, word, definition)
 }
 
 func assertEqualStrings(t testing.TB, got, want string) {
@@ -57,4 +55,12 @@ func assertNoError(t testing.TB, err error) {
 	if err != nil {
 		t.Fatal("got an error but should not have one")
 	}
+}
+
+func assertDefinition(t testing.TB, dictionary maps.Dictionary, word, definition string) {
+	t.Helper()
+
+	got, err := dictionary.Search(word)
+	assertNoError(t, err)
+	assertEqualStrings(t, got, definition)
 }
