@@ -6,9 +6,9 @@ import (
 )
 
 func TestSearch(t *testing.T) {
-	dictionary := map[string]string{"test": "this is just a test"}
+	dictionary := maps.Dictionary{"test": "this is just a test"}
 
-	got := maps.Search(dictionary, "test")
+	got := dictionary.Search("test")
 	want := "this is just a test"
 
 	assertEqualStrings(t, got, want)
