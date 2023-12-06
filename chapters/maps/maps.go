@@ -1,10 +1,13 @@
 package maps
 
-import "errors"
+import (
+	"errors"
+)
 
 type Dictionary map[string]string
 
 var ErrWordNotFound = errors.New("word not in dictionary")
+var ErrWordExists = errors.New("word already exists in dictionary")
 
 func (d Dictionary) Search(word string) (string, error) {
 	definition, ok := d[word]
@@ -15,6 +18,13 @@ func (d Dictionary) Search(word string) (string, error) {
 	return definition, nil
 }
 
-func (d Dictionary) Add(word, definition string) {
-	d[word] = definition
+// Add should not modify existing definitions for a word, it should only add new words
+func (d Dictionary) Add(word, definition string) error {
+	_, ok := d[word]
+
+	if !ok {
+		d[word] = definition
+		return nil
+	}
+	return ErrWordExists
 }

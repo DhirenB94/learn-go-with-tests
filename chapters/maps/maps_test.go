@@ -24,13 +24,27 @@ func TestSearch(t *testing.T) {
 }
 
 func TestAdd(t *testing.T) {
-	dictionary := maps.Dictionary{}
+	t.Run("new word", func(t *testing.T) {
+		dictionary := maps.Dictionary{}
 
-	word := "test3"
-	definition := "this is just a test"
-	dictionary.Add(word, definition)
+		word := "test"
+		definition := "this is just a test"
+		err := dictionary.Add(word, definition)
 
-	assertDefinition(t, dictionary, word, definition)
+		assertNoError(t, err)
+		assertDefinition(t, dictionary, word, definition)
+	})
+	t.Run("word already exists", func(t *testing.T) {
+		word := "test"
+		definition := "this is just a test"
+
+		dictionary := maps.Dictionary{word: definition}
+
+		err := dictionary.Add(word, "new definition for existing word")
+
+		assertError(t, err, maps.ErrWordExists)
+		assertDefinition(t, dictionary, word, definition)
+	})
 }
 
 func assertEqualStrings(t testing.TB, got, want string) {
