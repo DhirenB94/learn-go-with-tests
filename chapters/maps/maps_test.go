@@ -9,23 +9,16 @@ func TestSearch(t *testing.T) {
 	dictionary := maps.Dictionary{"test": "this is just a test"}
 	t.Run("word not in dictionary", func(t *testing.T) {
 
-		_, err := dictionary.Search("test2")
-		if err == nil {
-			t.Fatal("expected an error but did not get one")
-		}
-		want := "word not in dictionary"
-
-		assertEqualStrings(t, err.Error(), want)
-		// Errors can be converted to a string with the .Error() method
+		got, err := dictionary.Search("test2")
+		assertError(t, err, maps.ErrWordNotFound)
+		assertEqualStrings(t, got, "")
 	})
 	t.Run("word is in dictionary", func(t *testing.T) {
 		got, err := dictionary.Search("test")
-		if err != nil {
-			t.Fatal("should not have an error but got one")
-		}
 		want := "this is just a test"
 
 		assertEqualStrings(t, got, want)
+		assertNoError(t, err)
 	})
 
 }
@@ -35,5 +28,21 @@ func assertEqualStrings(t testing.TB, got, want string) {
 
 	if got != want {
 		t.Errorf("got %q, want %q", got, want)
+	}
+}
+
+func assertError(t testing.TB, got, want error) {
+	t.Helper()
+
+	if got != want {
+		t.Errorf("got %q, want %q", got, want)
+	}
+}
+
+func assertNoError(t testing.TB, err error) {
+	t.Helper()
+
+	if err != nil {
+		t.Fatal("got an error but should not have one")
 	}
 }
