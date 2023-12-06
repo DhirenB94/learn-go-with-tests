@@ -48,15 +48,29 @@ func TestAdd(t *testing.T) {
 }
 
 func TestUpdate(t *testing.T) {
-	word := "test"
-	definition := "this is just a test"
-	newDefinition := "new definition of existing word"
+	t.Run("word exists, so update", func(t *testing.T) {
+		word := "test"
+		definition := "this is just a test"
+		newDefinition := "new definition of existing word"
 
-	dictionary := maps.Dictionary{word: definition}
+		dictionary := maps.Dictionary{word: definition}
 
-	dictionary.Update(word, newDefinition)
+		err := dictionary.Update(word, newDefinition)
 
-	assertDefinition(t, dictionary, word, newDefinition)
+		assertNoError(t, err)
+		assertDefinition(t, dictionary, word, newDefinition)
+	})
+	t.Run("new word, so do not update", func(t *testing.T) {
+		word := "test"
+		newDefinition := "this is just a test"
+
+		dictionary := maps.Dictionary{}
+
+		err := dictionary.Update(word, newDefinition)
+
+		assertError(t, err, maps.ErrNoWordFoundToUpdate)
+
+	})
 }
 
 func assertEqualStrings(t testing.TB, got, want string) {
