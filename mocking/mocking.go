@@ -7,6 +7,12 @@ import (
 	"time"
 )
 
+// Defining the sleep dependency as an interface
+// lets us use the real sleep in main and a spy sleeper in the tests
+type Sleeper interface {
+	Sleep()
+}
+
 const finalWord = "Go!"
 const coutdownStart = 3
 
