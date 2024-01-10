@@ -15,7 +15,7 @@ func (s *SpySleeper) Sleep() {
 
 func TestCountdown(t *testing.T) {
 	buffer := &bytes.Buffer{}
-	spySleeper := SpySleeper{Calls: 0}
+	spySleeper := &SpySleeper{Calls: 0}
 	Countdown(buffer, spySleeper)
 
 	got := buffer.String()
