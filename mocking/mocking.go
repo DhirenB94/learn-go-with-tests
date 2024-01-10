@@ -13,12 +13,6 @@ type Sleeper interface {
 	Sleep()
 }
 
-type realSleeper struct{}
-
-func (rs *realSleeper) Sleep() {
-	time.Sleep(1 * time.Second)
-}
-
 // Allows us to configure the time slept
 // duration to configure the time slept and sleep as a way to pass in a sleep function.
 // The signature of sleep is the same as for time.Sleep allowing us to use time.Sleep in our real implementation
@@ -43,6 +37,9 @@ func Countdown(writer io.Writer, sleeper Sleeper) {
 }
 
 func main() {
-	sleeper := &realSleeper{}
+	sleeper := &ConfigurableSleeper{
+		duration: 1 * time.Second,
+		sleep:    time.Sleep,
+	}
 	Countdown(os.Stdout, sleeper)
 }
