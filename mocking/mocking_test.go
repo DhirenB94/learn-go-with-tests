@@ -22,18 +22,10 @@ func (s *SpyCountdownOperations) Write(p []byte) (n int, err error) {
 	return
 }
 
-type SpySleeper struct {
-	Calls int
-}
-
-func (s *SpySleeper) Sleep() {
-	s.Calls++
-}
-
 func TestCountdown(t *testing.T) {
-	t.Run("sleep is called the correct number of times", func(t *testing.T) {
+	t.Run("prints the expected output of 3 2 1 Go!", func(t *testing.T) {
 		buffer := &bytes.Buffer{}
-		spySleeper := &SpySleeper{Calls: 0}
+		spySleeper := &SpyCountdownOperations{}
 		Countdown(buffer, spySleeper)
 
 		got := buffer.String()
@@ -44,10 +36,6 @@ func TestCountdown(t *testing.T) {
 
 		if got != want {
 			t.Errorf("got %q, want %q", got, want)
-		}
-
-		if spySleeper.Calls != 3 {
-			t.Errorf("not enough calls to the sleeper, want 3 but got %d", spySleeper.Calls)
 		}
 	})
 	t.Run("sleeps are called in the correct order", func(t *testing.T) {
