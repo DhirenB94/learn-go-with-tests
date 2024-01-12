@@ -54,3 +54,8 @@ func TestCheckWebsites(t *testing.T) {
 		t.Errorf("got %v, but wanted %v", got, want)
 	}
 }
+
+//the test is failing because none of the goroutines in the for loop had enough time to add their results to the results map
+//the websiteChecker func is too fast, so you have an empty map when the return is called
+// what happens when we just put a sleep to increase the time and allow all the goroutines to complete their work?
+// Still fails
