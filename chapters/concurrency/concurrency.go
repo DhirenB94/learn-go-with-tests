@@ -1,7 +1,6 @@
 package concurrency
 
 import (
-	"fmt"
 	"time"
 )
 
@@ -12,10 +11,8 @@ func CheckWebsites(wc WebsiteChecker, urls []string) map[string]bool {
 	results := make(map[string]bool)
 
 	for _, url := range urls {
-		fmt.Println("out the go routine, url: ", url)
 		//each iteration of the loop will run in its own go routine
 		go func(u string) {
-			fmt.Println("in the go routine, url: ", u)
 			results[u] = wc(u)
 		}(url)
 	}
@@ -33,3 +30,8 @@ func CheckWebsites(wc WebsiteChecker, urls []string) map[string]bool {
 // and then calling the anonymous function with the url as the argument
 // we make sure that the value of u is fixed as the value of url for the iteration of the loop that we're launching the goroutine in.
 // u is a copy of the value of url, and so can't be changed.
+
+//RACE CONDITIONS
+// With the above code, sometimes 2 of the go routines will try to write to the map at the exact same time (see with benchmark tests)
+// This is a race condition - a bug that occurs when the output of our software is dependent on timing and sequence of events that we cannot control
+// can detect race conditions with go test -race
