@@ -22,7 +22,9 @@ func slowWebsiteChecker(url string) bool {
 
 // the benchmark tests checkWebsites with 100 urls and a fake websiteChecker (which is deliberately slow)
 // resetTimer is used to reset the timing within the test before it actually runs
-// takes approx 2.41s
+// takes approx 2.25s
+
+// now with channnels it takes approx 0.025s
 func BenchmarkCheckWebsites(b *testing.B) {
 	urls := make([]string, 100)
 	for i := 0; i < len(urls); i++ {
