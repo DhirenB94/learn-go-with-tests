@@ -1,6 +1,9 @@
 package concurrency
 
-import "time"
+import (
+	"fmt"
+	"time"
+)
 
 type WebsiteChecker func(string) bool
 
@@ -9,8 +12,10 @@ func CheckWebsites(wc WebsiteChecker, urls []string) map[string]bool {
 	results := make(map[string]bool)
 
 	for _, url := range urls {
+		fmt.Println("out the go routine, url: ", url)
 		//each iteration of the loop will run in its own go routine
 		go func() {
+			fmt.Println("in the go routine, url: ", url)
 			results[url] = wc(url)
 		}()
 	}

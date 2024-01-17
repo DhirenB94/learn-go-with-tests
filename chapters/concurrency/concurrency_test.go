@@ -55,7 +55,7 @@ func TestCheckWebsites(t *testing.T) {
 	}
 }
 
-//the test is failing because none of the goroutines in the for loop had enough time to add their results to the results map
-//the websiteChecker func is too fast, so you have an empty map when the return is called
-// what happens when we just put a sleep to increase the time and allow all the goroutines to complete their work?
-// Still fails
+//Currently our test fails with a map of only 1 result, the last in the array
+//This is because in the for loop, the variable "url" is reused for each iteration, by getting a new value from the "urls" each time
+//But the goroutines have a reference to the "url" variable, not their own idependent copy
+//so they are all writing the value that the "url" variable has at the end of the iteration

@@ -2,7 +2,7 @@ package dep_test
 
 import (
 	"bytes"
-	dep "learn-go-with-tests/dependency-injection"
+	dep "learn-go-with-tests/chapters/dependency-injection"
 	"testing"
 )
 
