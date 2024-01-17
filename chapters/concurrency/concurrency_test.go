@@ -54,8 +54,3 @@ func TestCheckWebsites(t *testing.T) {
 		t.Errorf("got %v, but wanted %v", got, want)
 	}
 }
-
-//Currently our test fails with a map of only 1 result, the last in the array
-//This is because in the for loop, the variable "url" is reused for each iteration, by getting a new value from the "urls" each time
-//But the goroutines have a reference to the "url" variable, not their own idependent copy
-//so they are all writing the value that the "url" variable has at the end of the iteration
