@@ -9,12 +9,12 @@ import (
 
 // instead of testing speeds of the sites one after the other, check both at the same time with channels
 // exact timings dont matter, just care about which comes first
-func WebsiteRacer(a, b string) string {
+func WebsiteRacer(a, b string) (string, error) {
 	select {
 	case <-ping(a):
-		return a
+		return a, nil
 	case <-ping(b):
-		return b
+		return b, nil
 	}
 }
 
