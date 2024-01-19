@@ -28,14 +28,12 @@ func TestWebsiteRacer(t *testing.T) {
 			t.Fatalf("did not expect an error but got one %v", err)
 		}
 	})
-	t.Run("returns an error if the server doesnt respond within 10 seconds", func(t *testing.T) {
-		serverA := makeDelayedServer(12 * time.Second)
-		serverB := makeDelayedServer(11 * time.Second)
+	t.Run("returns an error if the server doesnt respond within the specified time", func(t *testing.T) {
+		server := makeDelayedServer(25 * time.Millisecond)
 
-		defer serverA.Close()
-		defer serverB.Close()
+		defer server.Close()
 
-		_, err := selct.WebsiteRacer(serverA.URL, serverB.URL)
+		_, err := selct.ConfigurableWebsiteRacer(server.URL, server.URL, 20*time.Millisecond)
 
 		if err == nil {
 			t.Error("expected an error but did not get one")

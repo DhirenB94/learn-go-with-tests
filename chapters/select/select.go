@@ -9,15 +9,21 @@ import (
 //Make a function called WebsiteRacer which takes two URLs and "races" them by hitting them with an HTTP GET and returning the URL which returned first.
 //If none of them return within 10 seconds then it should return an error.
 
-// instead of testing speeds of the sites one after the other, check both at the same time with channels
-// exact timings dont matter, just care about which comes first
+// configurable timeout added so the tests are not 10 secs long
+// can use a constant time as we have explicit requirements
+var tenSecsTimout = 10 + time.Second
+
 func WebsiteRacer(a, b string) (string, error) {
+	return ConfigurableWebsiteRacer(a, b, tenSecsTimout)
+}
+
+func ConfigurableWebsiteRacer(a, b string, timeout time.Duration) (string, error) {
 	select {
 	case <-ping(a):
 		return a, nil
 	case <-ping(b):
 		return b, nil
-	case <-time.After(10 * time.Second):
+	case <-time.After(timeout):
 		return "", fmt.Errorf("timed out waiting for %s and %s", a, b)
 	}
 }
