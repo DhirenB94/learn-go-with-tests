@@ -1,7 +1,6 @@
 package selct
 
 import (
-	"fmt"
 	"net/http"
 	"time"
 )
@@ -10,19 +9,19 @@ import (
 //If none of them return within 10 seconds then it should return an error.
 
 func WebsiteRacer(a, b string) string {
-	aStartTime := time.Now()
-	//this returns a http.response and an error, but not interested in these for the moment
-	http.Get(a)
-	aDuration := time.Since(aStartTime)
-
-	bStartTime := time.Now()
-	http.Get(b)
-	bDuration := time.Since(bStartTime)
-
-	fmt.Println("a", aDuration, "b", bDuration)
+	aDuration := measureDuration(a)
+	bDuration := measureDuration(b)
 
 	if aDuration < bDuration {
 		return a
 	}
 	return b
+}
+
+func measureDuration(url string) time.Duration {
+	startTime := time.Now()
+	http.Get(url)
+	duration := time.Since(startTime)
+
+	return duration
 }

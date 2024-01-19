@@ -9,13 +9,10 @@ import (
 )
 
 func TestWebsiteRacer(t *testing.T) {
-	slowServer := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		time.Sleep(20 * time.Millisecond)
-		w.WriteHeader(http.StatusOK)
-	}))
-	fastServer := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		w.WriteHeader(http.StatusOK)
-	}))
+	slowServer := makeDelayedServer(20 * time.Millisecond)
+	fastServer := makeDelayedServer(0 * time.Millisecond)
+	defer slowServer.Close()
+	defer fastServer.Close()
 
 	slowURL := slowServer.URL
 	fastURL := fastServer.URL
@@ -26,10 +23,11 @@ func TestWebsiteRacer(t *testing.T) {
 		t.Errorf("got %q but want %q", fastestURL, fastURL)
 	}
 
-	slowServer.Close()
-	fastServer.Close()
 }
 
-//using madeup/real urls in the test means that you actually have to hit those and so you are at the mercy of their timings
-//we can use the httptest pkg to create a mock HTTP server to test against
-//it finds an open port to listen on and then you can close it when you're done with your test.
+func makeDelayedServer(delay time.Duration) *httptest.Server {
+	return httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		time.Sleep(delay)
+		w.WriteHeader(http.StatusOK)
+	}))
+}
