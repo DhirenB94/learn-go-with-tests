@@ -1,7 +1,9 @@
 package selct
 
 import (
+	"fmt"
 	"net/http"
+	"time"
 )
 
 //Make a function called WebsiteRacer which takes two URLs and "races" them by hitting them with an HTTP GET and returning the URL which returned first.
@@ -15,6 +17,8 @@ func WebsiteRacer(a, b string) (string, error) {
 		return a, nil
 	case <-ping(b):
 		return b, nil
+	case <-time.After(10 * time.Second):
+		return "", fmt.Errorf("timed out waiting for %s and %s", a, b)
 	}
 }
 
